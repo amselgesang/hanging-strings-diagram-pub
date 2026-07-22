@@ -12,9 +12,6 @@ can be dressed in photorealistic materials.
 - **Integrity guarantee:** string length = value, always. Themes and physics are cosmetic by
   contract. Group/heat colors are data encodings and are deliberately *not* themable.
 
-Source for the public distribution mirror (`hanging-strings-diagram-pub`). The publishing
-script (`npm run publish:product`) copies this file to that repo’s `README.md`, rewrites
-chapter links under `docs/`, and syncs `demo/`, `package/`, and `textures/`.
 
 ## Developer guide
 
@@ -27,6 +24,9 @@ chapter links under `docs/`, and syncs `demo/`, `package/`, and `textures/`.
 | [API](docs/api.md) | Façade options/methods, data model, package exports |
 | [UI testing](docs/ui-testing.md) | Vitest, demo thumbs, manual checklist |
 | [Integration](docs/integration.md) | Best practices + vanilla / Chart.js / ECharts / React examples |
+
+Public distribution mirror for developers using Hanging Strings Diagram. Prebuilt package,
+static demo, developer guide, and thread texture sources — no library source tree.
 
 ## What's in this repository
 
