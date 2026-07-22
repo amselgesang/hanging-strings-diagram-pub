@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kitchen sink — Hanging Strings Diagram</title>
+    <script type="module" crossorigin src="../../assets/kitchen-sink-QfNKLDTb.js"></script>
+    <link rel="modulepreload" crossorigin href="../../assets/gallerySkin-B45H45tQ.js">
+    <link rel="modulepreload" crossorigin href="../../assets/thumbBackdrop-DwklJQZl.js">
+    <link rel="stylesheet" crossorigin href="../../assets/gallerySkin-BT1zPMn4.css">
+    <link rel="stylesheet" crossorigin href="../../assets/thumbBackdrop-Bnv04OKv.css">
+  </head>
+  <body>
+    <div class="app demo-feature">
+      <header class="demo-header">
+        <div class="demo-brand">
+          <a href="../../">← All features</a>
+          <div id="gallery-skin-picker"></div>
+        </div>
+        <h1>Kitchen sink</h1>
+        <p class="demo-intro">All controls on one page — the full lab.</p>
+      </header>
+
+      <div class="panel">
+        <div class="controls">
+          <div class="control-group">
+            <label class="title">Rail mode</label>
+            <div class="segmented" id="rail-mode-toggle">
+              <button type="button" data-value="straight" class="active">Straight</button>
+              <button type="button" data-value="arc">Arc</button>
+              <button type="button" data-value="wave">Wave</button>
+              <button type="button" data-value="ring">Ring</button>
+            </div>
+          </div>
+
+          <div class="control-group">
+            <label class="title">Theme</label>
+            <select id="theme-select"></select>
+          </div>
+
+          <div class="control-group">
+            <label class="title">Thread</label>
+            <select id="thread-select"></select>
+          </div>
+
+          <div class="control-group">
+            <label class="title">Backdrop</label>
+            <select id="backdrop-select">
+              <option value="off">Off</option>
+              <option value="plain" selected>White sheet</option>
+              <option value="tablecloth">Tablecloth</option>
+              <option value="bavarian">Bavarian check</option>
+            </select>
+          </div>
+
+          <div class="control-group">
+            <label class="title">2nd metric encoding</label>
+            <select id="secondary-encoding">
+              <option value="none">None</option>
+              <option value="knob">Knob size (D7)</option>
+              <option value="heat">Heat-map (D8)</option>
+              <option value="quipu" selected>Quipu knots (D28)</option>
+            </select>
+          </div>
+
+          <div class="control-group" id="heatmap-legend-group" style="display: none">
+            <label class="title">Heat-map scale (D8)</label>
+            <div class="heat-ramp">
+              <span id="heat-ramp-min"></span>
+              <div class="heat-ramp-bar"></div>
+              <span id="heat-ramp-max"></span>
+            </div>
+          </div>
+
+          <div class="control-group">
+            <label class="title">Scale reference</label>
+            <div class="checkbox-row">
+              <input type="checkbox" id="show-ticks" checked />
+              <label for="show-ticks">Show thread knots (D6)</label>
+            </div>
+          </div>
+
+          <div class="control-group">
+            <label class="title">Labels</label>
+            <div class="checkbox-row">
+              <input type="checkbox" id="label-values" checked />
+              <label for="label-values">Show value on 2nd line</label>
+            </div>
+          </div>
+
+          <div class="control-group">
+            <label class="title" for="tick-granularity-dial">Knot granularity (D6)</label>
+            <div class="slider-row">
+              <span class="slider-end-label">Coarse</span>
+              <input
+                type="range"
+                id="tick-granularity-dial"
+                min="2"
+                max="10"
+                value="8"
+                step="1"
+              />
+              <span class="slider-end-label">Fine</span>
+            </div>
+          </div>
+
+          <div class="control-group">
+            <label class="title" for="stiffness-slider">String stiffness (D10)</label>
+            <div class="slider-row">
+              <span class="slider-end-label">Flexible</span>
+              <input type="range" id="stiffness-slider" min="0" max="100" value="20" step="1" />
+              <span class="slider-end-label">Rigid</span>
+            </div>
+          </div>
+
+          <div class="control-group" style="flex: 1 1 260px">
+            <label class="title">Groups — click to flip to front (D4)</label>
+            <div class="legend" id="group-legend"></div>
+          </div>
+
+          <div class="control-group">
+            <label class="title">&nbsp;</label>
+            <button type="button" class="reset-btn" id="reset-btn">Reset order</button>
+          </div>
+        </div>
+        <p class="experiment-note" id="straight-note">
+          <strong>Slide (D20):</strong> drag a string sideways and its hanger slides freely
+          along the rod — it stops exactly where you drop it and no other string moves (slot
+          reorder retired; same rule as the ring's D17). Click a group swatch to bring that
+          whole group to the front — that and Reset are what re-arrange. <strong>Arc / Wave
+          (v2.5&nbsp;M2–M3):</strong> the same rail bent into a gentle sag or sine — strings
+          still hang plumb and their length is still the exact value (D1); knob heights just
+          stop lining up, so read the thread knots. Slid positions carry over between all three
+          planar rails. <strong>v2 (D16):</strong> strings with a +/− knob have
+          children — press the knob itself to unfurl a sub-rail hanging from it; press − to
+          collapse. The branch hangs from the parent's knob and follows it; children slide
+          along their sub-rail the same positional way.
+        </p>
+        <p class="experiment-note" id="ring-note" style="display: none">
+          Strings are placed around the rail ellipse and depth-scaled/faded toward the back (D3's
+          cheap fake-3D), growing/fading continuously as they swing. <strong>Slide (D17):</strong>
+          drag a string sideways and its hanger slides along the rod — it stays threaded on the
+          rail and stops exactly where you drop it; no other string moves. Drag the vinyl plate
+          to spin the whole ring continuously — same flexible-string swing physics (D10) as the
+          straight rail. Clicking a group swatch re-arranges the ring to bring that group to the
+          arc's front (center). <strong>v2 (D16):</strong> hierarchy works here too — press a +/−
+          knob to unfurl its sub-rail; the whole branch hangs from the parent's knob and
+          shrinks/fades with it as it moves around the ring.
+        </p>
+      </div>
+
+      <div class="panel">
+        <div class="chart-shell" id="chart"></div>
+      </div>
+    </div>
+  </body>
+</html>
