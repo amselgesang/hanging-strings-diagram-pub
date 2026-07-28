@@ -72,7 +72,7 @@ export declare function pleatShade(u: number, phase: number, intensity: number):
 export declare function threadWindAccel(u: number, phase: number, intensity: number): number;
 /** D21.3 sheet textures: the plain white cloth, a red-gingham tablecloth, or the Bavarian
  * blue-white lozenge check (Rauten). Keys are the Backdrop dropdown's option values. */
-export type SheetTexture = "plain" | "tablecloth" | "bavarian";
+export type SheetTexture = "plain" | "tablecloth" | "bavarian" | "eu" | "usa" | "image";
 export interface SheetBackdrop {
     setEnabled(enabled: boolean): void;
     setTexture(texture: SheetTexture): void;
@@ -84,6 +84,9 @@ export interface SheetBackdrop {
      * rail's extent — the sheet hangs exactly as wide as the diagram, not as wide as whatever
      * container hosts it. `containerWidthPx` converts px → the cloth's fixed view units. */
     setSpan(leftPx: number, rightPx: number, containerWidthPx: number): void;
+    /** D21.10: the URL the "image" cloth drapes (any flag/logo/photo — stretched like printed
+     * fabric). Takes effect when the texture is (or becomes) "image". */
+    setImage(url: string): void;
     /** Freeze/resume the breeze loop while an interaction needs the frame budget (disc spin). */
     setSuspended(suspended: boolean): void;
     /**

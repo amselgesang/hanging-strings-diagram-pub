@@ -2,8 +2,8 @@
 
 Hanging Strings Diagram is a data visualization in which **strings hang from a rail**. String
 length encodes the primary value exactly; a knob weights each string's end; optional secondary
-encodings (knob size, heat-map color, or quipu knots) and physical motion dress the chart
-without changing that reading.
+encodings (knob size, heat-map color, or quipu knots), opt-in sonification (plucked strings,
+pitch = value), and physical motion dress the chart without changing that reading.
 
 **Integrity guarantee:** string length = value, always. Themes, textures, breeze, and spring
 physics are cosmetic by contract and can never alter a quantitative reading. Group and heat-map

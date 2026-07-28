@@ -28,6 +28,7 @@ See [API — Data model](api.md#data-model) for field tables.
 | **Quipu knots** along the cord | Optional **second metric** as a tied number |
 | **Bead-ticks** along the string | Scale / gridline ticks at regular value intervals; **hidden while quipu is active** |
 | **Position along the rail** | Category identity / order (sortable, slidable) |
+| **Pitch on pluck** (opt-in audio) | Primary **value**, redundantly with length: pitch follows cord length physically (f ∝ 1/L — shorter string = higher note); stereo pan follows rail position |
 
 **Ceiling:** length (metric 1) plus **one** of knob size / heat-map color / quipu knots
 (metric 2). Do not encode three metrics at once. The façade exposes this as

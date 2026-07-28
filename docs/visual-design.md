@@ -64,6 +64,8 @@ See [API — Theming](api.md#theming) and [Integration](integration.md).
 | **Hover** | Built-in info card, or host tooltip via `onHover` with `showHoverCard: false`. |
 | **Breeze** | Optional cloth backdrop + cord sway; intensity via `setWindScale`. |
 | **Zoom / pan** | Chart window supports pinch/wheel zoom and pan on supported surfaces. |
+| **Rail-mode switch** | `setRailMode` morphs the rail in place — a sweep across the chart carries strings from one form to the next; cosmetic only, values stay true. |
+| **Sonify** | Opt-in (`sonification`): `play()` plucks the strings left→right — pitch from cord length (f ∝ 1/L), stereo pan from rail position. |
 
 Motion uses a damped spring “shock absorber”: grab feels 1:1 with the pointer; release flexes
 the thread and settles back to taut plumb. Stiffness `0`…`1` controls how floppy vs rigid
@@ -72,6 +74,7 @@ strings feel (`0.2` default on the façade).
 ## Accessibility notes
 
 Partial groundwork ships today: tabbable hit targets with name/value ARIA, arrow-key reorder,
-and `prefers-reduced-motion` defaults for breeze. A fuller a11y track (data-table fallback,
-keyboard map, sonification) is not yet complete — plan for host-side labels or tables if you
-need WCAG-complete non-visual access now.
+`prefers-reduced-motion` defaults for breeze, and opt-in **sonification** (see
+[API](api.md) — `sonification`, `play()`) as a non-visual reading of the values. The rest of
+the a11y track (data-table fallback, full keyboard map) is not yet complete — plan for
+host-side labels or tables if you need WCAG-complete non-visual access now.

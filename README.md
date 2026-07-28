@@ -8,7 +8,8 @@ can be dressed in photorealistic materials.
 - **Capabilities:** four rail forms (straight / arc / wave / perspective ring), two-level
   hierarchy, drag-to-slide, spin-able ring, group-to-front, heat-map or group coloring, knob
   size or quipu knots as a second metric, knot-style ticks, five preset themes, photoreal
-  thread textures, optional breeze cloth backdrop.
+  thread textures, optional breeze cloth backdrop, opt-in sonification (plucked-string
+  audio, pitch = value).
 - **Integrity guarantee:** string length = value, always. Themes and physics are cosmetic by
   contract. Group/heat colors are data encodings and are deliberately *not* themable.
 
@@ -40,4 +41,4 @@ static demo, developer guide, and thread texture sources — no library source t
 Baked luminance maps already ship inside `package/*.min.js` via `THREAD_TEXTURES`. The
 `textures/` folder is the editable photo sources for customization or re-baking.
 
-Published from the private/source project at version **4.1.0** (2026-07-22T21:40Z).
+Published from the private/source project at version **4.1.1** (2026-07-28T13:33Z).

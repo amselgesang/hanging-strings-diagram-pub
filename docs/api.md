@@ -43,7 +43,8 @@ SVG def ids.
 | `railMode` | `"straight" \| "arc" \| "wave" \| "ring"` | `"straight"` | Active rail form |
 | `theme` | `string \| HangingStringsDiagramTheme` | `"wool-brass"` | Theme key or object; **unknown keys throw** |
 | `threadTexture` | `string \| null` | `"kernmantle"` | Texture key; `null` = theme’s own texture |
-| `backdrop` | `"off" \| "plain" \| "tablecloth" \| "bavarian"` | `"plain"` | Breeze cloth; pass `"off"` to disable |
+| `backdrop` | `"off" \| "plain" \| "tablecloth" \| "bavarian" \| "eu" \| "usa" \| "image"` | `"plain"` | Breeze cloth; pass `"off"` to disable; `"image"` drapes `backdropImageUrl` |
+| `backdropImageUrl` | `string` | — | D21.10: the image the `"image"` cloth drapes (any URL — flag, logo, photo) |
 | `colorMode` | `"group" \| "heatmap"` | `"group"` | Legacy color switch (see `secondaryEncoding`) |
 | `knobEncodesSecondMetric` | `boolean` | `false` | Legacy knob-size flag |
 | `secondaryEncoding` | `"none" \| "knob" \| "heat" \| "quipu"` | derived / `"none"` | **Wins** over the legacy pair when set |
@@ -53,6 +54,7 @@ SVG def ids.
 | `stiffness` | `number` | `0.2` | `0` floppy … `1` rigid |
 | `height` | `number` | `460` | Base canvas height (px) |
 | `showHoverCard` | `boolean` | `true` | Built-in hover card |
+| `sonification` | `boolean \| SonificationOptions` | `false` | D31: opt-in audio — `true` = signed defaults (physical direction, pentatonic, 150 ms, pan); object tunes `volume` / `pitchDirection` / `scale` / `sweepStepMs` |
 | `onSelect` | `(groupId: string \| null) => void` | — | Group-to-front change |
 | `onReorder` | `(event: ReorderEvent) => void` | — | Slide **commit** (not per-frame) |
 | `onExpand` | `(event: ExpandEvent) => void` | — | Branch expand/collapse |
@@ -63,12 +65,16 @@ SVG def ids.
 | Method | Purpose |
 | --- | --- |
 | `update({ categories?, groups? })` | Diffed data replace; surviving ids keep order and slid positions |
-| `setRailMode(mode)` | Switch rail form |
+| `setRailMode(mode)` | Switch rail form; the rail morphs in place between forms (a sweeping transition, not a snap) |
 | `setTheme(theme)` | Theme key or object (unknown keys throw) |
 | `setThreadTexture(key)` | Texture key, or `null` for theme default |
 | `setBackdrop(mode)` | Backdrop mode |
+| `setBackdropImage(url)` | D21.10: drape any image as the cloth (sets the URL **and** switches to `"image"`) |
 | `setWindScale(scale)` | Multiply breeze intensity (`1` normal, `0` calm) |
 | `setSecondaryEncoding(mode)` | `"none" \| "knob" \| "heat" \| "quipu"` |
+| `play()` | D31: pluck the chart left→right (pitch = cord length, pan = x); resolves after the last pluck; no-op while sonification is off; call from a user gesture first (autoplay policy) |
+| `stop()` | Silence every scheduled/sounding pluck |
+| `setSonification(on)` | `boolean` or a `SonificationOptions` patch (an object implies on) |
 | `setOptions(patch)` | Patch `colorMode`, `knobEncodesSecondMetric`, `showTicks`, `tickTarget`, `labelValues`, `stiffness` |
 | `toggleGroup(groupId)` | Group-to-front toggle |
 | `toggleExpand(id)` | Expand/collapse a branch (no-op without children) |

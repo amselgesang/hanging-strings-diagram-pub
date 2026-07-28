@@ -11,7 +11,7 @@
  * in the svg renderer package).
  */
 import "./style.css";
-export { createHangingStringsDiagram, type HangingStringsDiagram, type HangingStringsDiagramOptions, type HangingStringsDiagramDisplayOptions, type RailMode, type BackdropMode, type ReorderEvent, type ExpandEvent, type HoverEvent, type SecondaryEncoding, } from "./facade";
+export { createHangingStringsDiagram, type HangingStringsDiagram, type HangingStringsDiagramOptions, type HangingStringsDiagramDisplayOptions, type RailMode, type BackdropMode, type ReorderEvent, type ExpandEvent, type HoverEvent, type SecondaryEncoding, type SonificationOptions, } from "./facade";
 export type { StringHoverEvent } from "./renderers/svg/hover";
 export type { HangingStringCategory, HangingStringGroup, HangingStringsDiagramConfig, ColorMode, } from "./core/types";
 export { DEFAULT_CONFIG } from "./core/types";
@@ -22,6 +22,8 @@ export { computeRingHierarchyLayout, type RingHierarchyConfig } from "./core/rin
 export { StraightRailForm, ArcRailForm, WaveRailForm, FreeformRailForm, EllipseRailForm, loopDepthFromY, type PlanarRailForm, } from "./core/railForm";
 export { linearScale, sqrtScale, tickStep, ticksBelow, niceStep, heatmapColor } from "./core/scale";
 export { computeQuipuLayout, quipuNeededDropPx, isBigFifth, DEFAULT_QUIPU_CONFIG, type QuipuConfig, type QuipuLayout, type QuipuGlyph, } from "./core/quipu";
+export { frequencyFor, sweepSchedule, DEFAULT_SONIFY_CONFIG, type SonifyConfig, type SonifyScale, type PitchDirection, type SweepNote, } from "./core/sonify";
+export { createPluckPlayer, type PluckPlayer, type PluckOptions } from "./renderers/audio/pluck";
 export { THEMES, STUDIO_THEME, WORKSHOP_THEME, FOUNDRY_THEME, INK_PAPER_THEME, WOOL_BRASS_THEME, type HangingStringsDiagramTheme, type ThemeFill, type ThemeShadow, type ThemeGradientStop, type ThemePatternTile, type ThemePatternMark, type ThemeThreadTexture, type ThemeImageLuminanceTexture, } from "./core/theme";
 export { THREAD_TEXTURES } from "./core/assets/threadTextures";
 export { applyTheme, themeCssVars, createFillDef } from "./renderers/svg/theme";
