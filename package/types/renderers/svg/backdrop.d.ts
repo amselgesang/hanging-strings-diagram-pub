@@ -28,6 +28,22 @@ export type SheetTopProfile = number | readonly number[];
 export declare function sheetXPx(u: number, containerWidthPx: number): number;
 /** The profile's height at fraction `u` — scalar passthrough, linear interp for curves. */
 export declare function profileAt(top: SheetTopProfile, u: number): number;
+/**
+ * Adaptive degradation ladder (queries/breeze-cloth-mobile-fps option 4): when the page's
+ * measured rAF cadence stays slow, the cloth sheds detail one rung at a time — and climbs
+ * back when the budget recovers. Rung 1 is exactly the static coarse-pointer LOD (phones
+ * START there); rung 3 freezes the cloth into the same static drape reduced-motion uses,
+ * while the chart's thread wind (cheap) keeps the breeze alive.
+ */
+export interface LadderProfile {
+    cols: number;
+    rows: number;
+    strips: number;
+    halfRate: boolean;
+    frozen: boolean;
+}
+export declare function ladderProfile(rung: number): LadderProfile;
+export declare const LADDER_MAX = 3;
 export interface BreezeSignal {
     /** Wave travel speed multiplier — drifts around 1, gusts up, lulls down. */
     speed: number;

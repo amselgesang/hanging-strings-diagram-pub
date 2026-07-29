@@ -62,7 +62,7 @@ See [API — Theming](api.md#theming) and [Integration](integration.md).
 | **Group-to-front** | Select a group to front it (ring: center at the visual front) and dim others. |
 | **Hierarchy expand** | Expand a parent knob to unfurl its children on a sub-rail; collapse to tuck away. |
 | **Hover** | Built-in info card, or host tooltip via `onHover` with `showHoverCard: false`. |
-| **Breeze** | Optional cloth backdrop + cord sway; intensity via `setWindScale`. |
+| **Breeze** | Optional cloth backdrop + cord sway; intensity via `setWindScale`. While breeze is on, thread/label drop-shadows shed for frame rate; on touch devices the cloth renders at reduced detail and half rate, and under sustained low frame rate any device sheds cloth detail progressively (freezing the cloth entirely in the worst case — cords keep swaying), recovering when the budget does. |
 | **Zoom / pan** | Chart window supports pinch/wheel zoom and pan on supported surfaces. |
 | **Rail-mode switch** | `setRailMode` morphs the rail in place — a sweep across the chart carries strings from one form to the next; cosmetic only, values stay true. |
 | **Sonify** | Opt-in (`sonification`): `play()` plucks the strings left→right — pitch from cord length (f ∝ 1/L), stereo pan from rail position. |
