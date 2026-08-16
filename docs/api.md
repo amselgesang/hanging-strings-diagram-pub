@@ -45,6 +45,7 @@ SVG def ids.
 | `threadTexture` | `string \| null` | `"kernmantle"` | Texture key; `null` = theme’s own texture |
 | `backdrop` | `"off" \| "plain" \| "tablecloth" \| "bavarian" \| "eu" \| "usa" \| "image"` | `"plain"` | Breeze cloth; pass `"off"` to disable; `"image"` drapes `backdropImageUrl` |
 | `backdropImageUrl` | `string` | — | D21.10: the image the `"image"` cloth drapes (any URL — flag, logo, photo) |
+| `backdropRenderer` | `"auto" \| "canvas" \| "svg"` | `"auto"` | How the cloth is painted: `"canvas"` draws it into one `<canvas>` (cheapest — a repaint is one texture upload; SVG re-rasterized every pattern cell per frame and pegged WebKit's GPU process); `"auto"` uses canvas when a 2d context exists, else the SVG cloth |
 | `colorMode` | `"group" \| "heatmap"` | `"group"` | Legacy color switch (see `secondaryEncoding`) |
 | `knobEncodesSecondMetric` | `boolean` | `false` | Legacy knob-size flag |
 | `secondaryEncoding` | `"none" \| "knob" \| "heat" \| "quipu"` | derived / `"none"` | **Wins** over the legacy pair when set |

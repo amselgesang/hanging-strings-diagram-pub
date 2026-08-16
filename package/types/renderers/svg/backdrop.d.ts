@@ -4,19 +4,30 @@
  * breeze it should be random speed and random intensity"). Fits the hanging metaphor: a cloth
  * backdrop pinned up behind the strings, giving the diagram depth.
  *
- * BREEZE MODEL — organic, endless, never visibly repeating: real breezes don't loop, so
- * instead of a fixed-period animation the wind is a sum of slow sines with INCOMMENSURATE
- * periods (11.3s / 23.7s / 8.9s / 19.3s share no common multiple within hours), one pair
- * modulating SPEED (how fast the wave travels through the cloth) and one pair INTENSITY (how
- * far the cloth billows). The wave phase INTEGRATES the speed signal, so gusts genuinely
- * accelerate the fabric rather than just scaling it. Deterministic and cheap — no RNG state,
- * no physics solver, and testable as pure math.
+ * The WIND model, adaptive degradation ladder, and rAF driver (draw cap + perceptibility
+ * gate) live in the shared ../clothLoop.ts — this file re-exports them for its historical
+ * consumers and adds the SVG-specific painting plus the cloth GEOMETRY math (offsets, warp
+ * mesh, pleat shading), which the canvas backdrop imports in turn.
  *
  * PERFORMANCE (texturing.md budget): no SVG filters anywhere — the sheet is one path + a few
  * gradient-filled fold streaks, rebuilt each frame from ~a dozen trig calls. The rAF loop
  * only runs while enabled and parks itself when `prefers-reduced-motion` is set (a static,
  * gently-draped sheet still renders — depth without motion).
  */
+export { breezeSignal, DRAW_EPSILON_PX, DRAW_MIN_INTERVAL_MS, LADDER_MAX, ladderProfile, WAVE_AMPLITUDE, type BreezeSignal, type LadderProfile, } from "../clothLoop";
+/** The backdrop's own fixed drawing space; the svg stretches it to the container
+ * (`preserveAspectRatio="none"`), so cloth geometry never needs resize plumbing. */
+export declare const VIEW_W = 1000;
+export declare const VIEW_H = 560;
+/** Margins that let the page background show around the sheet — it reads as a hung cloth,
+ * not a second page background. */
+export declare const SHEET_MARGIN_X = 56;
+/** Default top edge. D21.5: like the D21.3 hem, the top is LIVE — main.ts measures the
+ * visible rail's line (the rod in planar modes, the ring's top rim) in container pixels and
+ * pins the cloth there via setTop(), so the sheet visibly hangs from the same line the
+ * strings do instead of floating at its own height. This constant only covers the beat
+ * before the first measurement. */
+export declare const SHEET_TOP = 22;
 /** D21.6: the live top is a PROFILE, not one height — main.ts samples the rendered rail's
  * geometry (straight rod, arc, wave, or the ring's back rim) and the cloth's top edge follows
  * that curve, so the sheet visibly hangs from whatever form the rail takes. */
@@ -28,30 +39,13 @@ export type SheetTopProfile = number | readonly number[];
 export declare function sheetXPx(u: number, containerWidthPx: number): number;
 /** The profile's height at fraction `u` — scalar passthrough, linear interp for curves. */
 export declare function profileAt(top: SheetTopProfile, u: number): number;
-/**
- * Adaptive degradation ladder (queries/breeze-cloth-mobile-fps option 4): when the page's
- * measured rAF cadence stays slow, the cloth sheds detail one rung at a time — and climbs
- * back when the budget recovers. Rung 1 is exactly the static coarse-pointer LOD (phones
- * START there); rung 3 freezes the cloth into the same static drape reduced-motion uses,
- * while the chart's thread wind (cheap) keeps the breeze alive.
- */
-export interface LadderProfile {
-    cols: number;
-    rows: number;
-    strips: number;
-    halfRate: boolean;
-    frozen: boolean;
-}
-export declare function ladderProfile(rung: number): LadderProfile;
-export declare const LADDER_MAX = 3;
-export interface BreezeSignal {
-    /** Wave travel speed multiplier — drifts around 1, gusts up, lulls down. */
-    speed: number;
-    /** Billow amplitude multiplier, 0.15..~1.2 — calm to fresh breeze. */
-    intensity: number;
-}
-/** The wind at wall-clock second `t` — pure and deterministic (see module note). */
-export declare function breezeSignal(t: number): BreezeSignal;
+/** Hem base distance from the view's bottom edge — leaves room for the downward billow.
+ * D21.3: the viewBox HEIGHT is live (the container's pixel height, tracked by a
+ * ResizeObserver) and the chart shell reserves extra bottom padding, so the hem hangs BELOW
+ * the lowest knob however far branches grow the canvas. */
+export declare const SHEET_BOTTOM_MARGIN = 46;
+/** Peak pleat opacity at full shading (element opacity scales with the local wave slope). */
+export declare const PLEAT_MAX_OPACITY = 0.17;
 /** Lateral cloth displacement at height-fraction `v` (0 = pinned top, 1 = free bottom) and
  * horizontal fraction `u`, for wave phase `phase` and billow `intensity`. The top is pinned
  * (displacement → 0), the free edge moves most — like a real hung sheet. Two superimposed
@@ -61,6 +55,16 @@ export declare function clothOffset(u: number, v: number, phase: number, intensi
 /** The sheet outline at a given phase/intensity — pinned straight top, gently waving sides,
  * billowing bottom edge (smooth quadratic runs through the sampled wave). Pure: testable. */
 export declare function sheetPath(phase: number, intensity: number, bottom?: number, top?: SheetTopProfile, left?: number, right?: number): string;
+/** D21.4 warp mesh (user, 2026-07-15: "distort the texture as the sheet moves"): the
+ * patterned cloths render as a COLS×ROWS mesh of cells whose rectangle paths are STATIC —
+ * only each cell's affine transform updates per frame, mapping it onto its displaced corners.
+ * The pattern fill rides the element transform, so the weave stretches and shears WITH the
+ * fabric (a printed cloth, not a window onto wallpaper); per-cell affinity keeps neighboring
+ * checks near-continuous, and a same-paint 1px stroke hides the hairline seams of the
+ * non-affine residual. */
+/** Cells extend this far into their right/bottom neighbors so affine residual gaps never
+ * show the page background through the cloth. */
+export declare const MESH_OVERLAP = 0.75;
 /** A mesh corner's displaced position — the same wave field as the hem/pleats, applied over
  * the whole cloth: vertical billow (pin-scaled by clothOffset's v²) plus the horizontal
  * shimmy, so the hem row reproduces sheetPath's hem exactly and the top row stays pinned. */
@@ -89,6 +93,14 @@ export declare function threadWindAccel(u: number, phase: number, intensity: num
 /** D21.3 sheet textures: the plain white cloth, a red-gingham tablecloth, or the Bavarian
  * blue-white lozenge check (Rauten). Keys are the Backdrop dropdown's option values. */
 export type SheetTexture = "plain" | "tablecloth" | "bavarian" | "eu" | "usa" | "image";
+/**
+ * Pre-rasterization of the vector flag cloths (queries/breeze-cloth-mobile-fps option 6):
+ * as live SVG, every warp-mesh cell re-rasterizes the flag's ~60 vector nodes under a fresh
+ * affine each frame. Baked once into a bitmap, each cell is a plain texture sample instead.
+ * Drawn with canvas 2D (same geometry as the markup builders above); returns null when no
+ * 2d context exists (tests, exotic embeds) — the caller then keeps the vector content.
+ */
+export declare function bakeFlagCanvas(kind: "eu" | "usa"): HTMLCanvasElement | null;
 export interface SheetBackdrop {
     setEnabled(enabled: boolean): void;
     setTexture(texture: SheetTexture): void;

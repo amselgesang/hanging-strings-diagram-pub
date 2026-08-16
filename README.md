@@ -41,4 +41,4 @@ static demo, developer guide, and thread texture sources — no library source t
 Baked luminance maps already ship inside `package/*.min.js` via `THREAD_TEXTURES`. The
 `textures/` folder is the editable photo sources for customization or re-baking.
 
-Published from the private/source project at version **4.1.3** (2026-07-29T15:25Z).
+Published from the private/source project at version **4.2.0** (2026-08-16T20:45Z).

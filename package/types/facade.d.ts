@@ -62,6 +62,12 @@ export interface HangingStringsDiagramOptions {
     /** D21.10: the image the `"image"` backdrop drapes (any URL — flag, logo, photo). Only
      * meaningful with `backdrop: "image"`. */
     backdropImageUrl?: string;
+    /** How the breeze cloth is painted (queries/breeze-webkit-gpu-idle-2026-08-16). "canvas"
+     * draws it into one <canvas> — a repaint costs one texture upload instead of an SVG
+     * dirty-region re-rasterization of every pattern-filled mesh cell, which pegged WebKit's
+     * GPU process. "svg" keeps the original DOM cloth. Default "auto": canvas when a 2d
+     * context is available, else SVG. Same wind, geometry, ladder and API either way. */
+    backdropRenderer?: "auto" | "canvas" | "svg";
     colorMode?: ColorMode;
     knobEncodesSecondMetric?: boolean;
     /** D29 (v4): ONE switch for how the 2nd metric is encoded — knob size (D7), heat-map color

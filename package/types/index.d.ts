@@ -31,3 +31,4 @@ export { syncLabelContrast, syncAllChartLabelContrast, isDarkCssColor, resolveLa
 export { SvgRenderer, type SvgRendererOptions } from "./renderers/svg/render";
 export { RingSvgRenderer, type RingSvgRendererOptions } from "./renderers/svg/renderRing";
 export { createSheetBackdrop, breezeSignal, type SheetBackdrop, type SheetTexture, type SheetTopProfile, } from "./renderers/svg/backdrop";
+export { createCanvasSheetBackdrop } from "./renderers/canvas/backdrop";

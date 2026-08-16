@@ -80,7 +80,8 @@ export declare class RingRailAssembly {
      * full turn is not a drag — it's a programmatic reset (e.g. group-to-front zeroing the
      * offset), so snap rather than whip the platter through N revolutions. */
     setTargetRotation(deg: number): void;
-    /** Depth fade for mini rings — the whole disc dims with its parent string. */
+    /** Depth fade for mini rings — the whole disc dims with its parent string. Diffed: runs
+     * every animation frame, and an unchanged depth shouldn't dirty the style. */
     setOpacity(opacity: number): void;
     /** Forwards rotation accumulated since the last frame as ONE `onRotate` call — pointermove
      * can fire far faster than the display refreshes, and each onRotate re-runs the caller's full
