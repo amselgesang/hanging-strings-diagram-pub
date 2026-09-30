@@ -9,8 +9,19 @@ pitch = value), and physical motion dress the chart without changing that readin
 physics are cosmetic by contract and can never alter a quantitative reading. Group and heat-map
 colors are data encodings and are deliberately *not* themable.
 
-Package: `hanging-strings-diagram` · CSS prefix: `hsd-` · Recommended entry:
+Package: `hanging-strings-diagram` · **Version: 4.3.0** · CSS prefix: `hsd-` · Recommended entry:
 `createHangingStringsDiagram(container, options)`.
+
+## What changed in 4.3.0
+
+- **Image URLs are checked.** `backdropImageUrl`, `setBackdropImage(url)` and custom image
+  thread textures accept only `https:`, `http:`, `blob:`, `data:image/…` or relative URLs;
+  anything else throws a `TypeError` (see [Security](security.md#image-urls)).
+- **The ESM bundle is now minified.** `hanging-strings-diagram.min.js` shrank from 573 kB to
+  455 kB; exports and tree-shaking are unchanged, stack traces now need the shipped source map.
+- **Browser floor stated:** the bundles are ES2020 syntax — Chrome 87+, Edge 88+,
+  Firefox 78+, Safari 14+ (see [API](api.md#package-exports)). This is unchanged from 4.2.
+- Build tooling moved to Vite 8 (Rolldown); no API changes.
 
 ## Prerequisites
 
@@ -31,5 +42,5 @@ Package: `hanging-strings-diagram` · CSS prefix: `hsd-` · Recommended entry:
 
 - [Developer README](developer_readme.md) — short landing page with links to every chapter.
 - [API](api.md) — install entry points, façade options, and package exports.
-- [Integration](integration.md) — worked examples (vanilla, Chart.js, ECharts, React).
+- [Integration](integration.md) — worked examples (vanilla, Chart.js, ECharts, React, Excel).
 - Live demo gallery (main package) — run `npm run dev` and open `http://localhost:5173`.

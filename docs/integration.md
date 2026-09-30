@@ -226,6 +226,82 @@ export function KpiCurtain({ categories, groups }) {
 All `createHangingStringsDiagram` options are props. `showHoverCard` and `height` are
 creation-time — change them by remounting (`key`). Callbacks may be inline; they are wired
 through stable refs and do not recreate the chart.
+---
+
+## Example 5 — Excel (content add-in)
+
+The chart sits **inside the worksheet**, reads a table on the sheet, and follows edits. Two
+pieces: the `hanging-strings-diagram/excel` adapter (works in any Office.js page — task pane
+or content object) and a ready-made content add-in (`addins/excel/`) you can sideload as is.
+
+### Sheet layout the adapter understands
+
+| Name | Value | Secondary | Group | Parent |
+| --- | --- | --- | --- | --- |
+| Revenue | 92 | 8.2 | Sales | |
+| EMEA | 60 | | Sales | Revenue |
+
+- `Name` + a numeric `Value` are enough; the other columns are optional.
+- Roles are found by header text (`Name/Label/Category…`, `Value/Amount/Score…`,
+  `Secondary/Knob/Heat/Share…`, `Group/Series/Team…`, `Parent`), or by position without a
+  header: A = name, B = value, next numeric column = secondary, next text column = group.
+- Rows with a blank name or a non-numeric value are skipped. `Parent` nests rows under the
+  row with that name (two-level hierarchy).
+- Default source: the active sheet's **used range**, re-measured on every read, so appended
+  rows appear. Pass an `address` or a `table` name to pin the source.
+
+### Adapter in your own add-in page
+
+```html
+<script src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js"></script>
+<link rel="stylesheet" href="hanging-strings-diagram.css">
+<script src="hanging-strings-diagram.umd.min.js"></script>
+<script src="hanging-strings-diagram-excel.umd.min.js"></script>
+<div id="chart" style="height: 480px"></div>
+<script>
+  Office.onReady().then(async () => {
+    const handle = await HangingStringsDiagramExcel.attachHangingStringsDiagramToExcel(
+      document.getElementById("chart"),
+      {
+        excel: Excel,                    // the Office.js namespace
+        source: { address: "A1:D20" },   // or { table: "KPIs" }, or omit = used range
+        theme: "workshop",
+        onSync: (m) => console.log(m.reason, m.address, m.mapped.categories.length),
+        onError: (e) => console.warn("sheet read failed, keeping last data", e),
+      }
+    );
+    handle.instance.setRailMode("ring"); // everything else through the façade
+    // handle.refresh(); handle.setSource({ table: "Q3" }); handle.dispose();
+  });
+</script>
+```
+
+```ts
+import { attachHangingStringsDiagramToExcel, excelRangeToHangingStringsDiagram } from "hanging-strings-diagram/excel";
+```
+
+**Live sync:** the adapter binds `Worksheet.onChanged` and re-reads the source on every
+edit (reads never overlap; bursts coalesce into one trailing read). `handle.live` tells you
+whether the event is bound (false on hosts below ExcelApi 1.7 — use `refresh()`). Edits made
+by automation (VBA, AppleScript) may not raise the event; pass `pollMs` (e.g. `1500`) to add
+a value-diffing poll as a safety net. `excelRangeToHangingStringsDiagram(values)` is the pure
+mapper if you only want the data shape.
+
+### The ready-made content add-in
+
+`addins/excel/manifest.xml` points at the published page. To use it as an end user, sideload
+the manifest (Mac: copy it to `~/Library/Containers/com.microsoft.Excel/Data/Documents/wef`
+and restart Excel) — or open a workbook that already embeds the add-in, which activates it
+without any ribbon interaction. For local development:
+
+```bash
+npm run excel:sideload
+```
+
+starts the dev server, registers a `localhost` manifest, restarts Excel when needed, and
+opens a sample workbook with the chart embedded next to its data. Plain `http://localhost`
+works in Excel for Mac without a certificate. The page also runs in a normal browser in a
+preview mode with sample data.
 
 ---
 

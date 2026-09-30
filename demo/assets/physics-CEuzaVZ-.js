@@ -1,0 +1,6 @@
+import"./labelContrast-BR8LLLbA.js";import"./gallerySkin-CWX64URX.js";import{l as e,n as t,o as n,r,s as i,u as a}from"./thumbBackdrop-DQPvKFBk.js";import{t as o}from"./facade-DWAPskpp.js";var s=.12,{controls:c,chart:l,note:u}=n({title:`String physics`,intro:`Drag the disc to spin it. Cords chase their hangers with momentum and inertia — they bend and whip instead of locking stiff to the plate.`}),d=o(l,{categories:e,groups:a,theme:`studio`,secondaryEncoding:`none`,backdrop:t(`physics`),stiffness:s});d.setRailMode(`ring`),r(d);var f=document.createElement(`div`);f.className=`control-group`,f.innerHTML=`<label class="title" for="stiffness-slider">String flexibility (D10)</label>
+  <div class="slider-row">
+    <span class="slider-end-label">Flexible</span>
+    <input type="range" id="stiffness-slider" min="0" max="100" value="${Math.round(s*100)}" step="1" />
+    <span class="slider-end-label">Rigid</span>
+  </div>`,c.appendChild(f),f.querySelector(`#stiffness-slider`).addEventListener(`input`,e=>{d.setOptions({stiffness:Number(e.target.value)/100})}),i(c,d,a),u.hidden=!1,u.textContent=`Ring rail only, Studio theme, default kernmantle texture, no backdrop. Softer strings lag more when you spin.`;

@@ -1,0 +1,11 @@
+import"./labelContrast-BR8LLLbA.js";import"./gallerySkin-CWX64URX.js";import{c as e,l as t,n,o as r,r as i,s as a,u as o}from"./thumbBackdrop-DQPvKFBk.js";import{t as s}from"./facade-DWAPskpp.js";var{controls:c,chart:l,note:u}=r({title:`Sonification — the strings sing`,intro:`Every cord is a string instrument: pitch is its length (a real string's frequency is inversely proportional to length — longer = lower), plucked with Karplus-Strong synthesis, panned to its place on the rail. Press Play and hear the chart's contour left to right.`}),d=s(l,{categories:t,groups:o,sonification:!0,backdrop:n(`sonification`)});i(d);var f=document.createElement(`div`);f.className=`control-group`,f.innerHTML=`<label class="title">Sound (D31)</label>
+  <div class="row" style="display:flex; gap:8px">
+    <button class="reset-btn" id="sonify-play">▶ Play the chart</button>
+    <button class="reset-btn" id="sonify-stop">■ Stop</button>
+  </div>`,c.appendChild(f);var p=f.querySelector(`#sonify-play`);p.addEventListener(`click`,()=>{p.disabled=!0,d.play().finally(()=>{p.disabled=!1})}),f.querySelector(`#sonify-stop`).addEventListener(`click`,()=>{d.stop(),p.disabled=!1});var m=document.createElement(`div`);m.className=`control-group`,m.innerHTML=`<label class="title">Pitch direction (Q33)</label>
+  <div class="checkbox-row"><label>
+    <input type="radio" name="sonify-dir" value="physical" checked /> longer = lower (physical)
+  </label></div>
+  <div class="checkbox-row"><label>
+    <input type="radio" name="sonify-dir" value="convention" /> bigger = higher (convention)
+  </label></div>`,c.appendChild(m),m.addEventListener(`change`,()=>{let e=m.querySelector(`input[name="sonify-dir"]:checked`).value;d.setSonification({pitchDirection:e})}),e(c,d,`straight`),a(c,d,o),u.hidden=!1,u.textContent=`D31 defaults: pentatonic over two octaves from A2 (quantized rungs, never a sour interval), Karplus-Strong plucks, stereo pan follows x, 150 ms per string. Slide or reorder cords, then Play again — the melody follows the layout. Audio is opt-in per instance and only ever starts from a click.`;

@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hanging Strings Diagram for Excel</title>
+    <!-- Office.js must be the first script on an add-in page (Microsoft requirement). The page
+         still works without it — a plain browser gets preview mode with sample data. -->
+    <script src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js"></script>
+    <style>:root{--xl-ink:#1f2a24;--xl-muted:#5b6a62;--xl-line:#d5ddd8;--xl-ground:#f7f9f8;--xl-accent:#1d6f42;--xl-warn:#9a5b12;--xl-warn-ground:#fff5e6}html,body{height:100%}body.xl-page{background:var(--xl-ground);min-height:0;color:var(--xl-ink);flex-direction:column;margin:0;font:12px/1.4 -apple-system,Segoe UI,system-ui,BlinkMacSystemFont,Roboto,Noto Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif;display:flex;overflow:hidden}.xl-bar{border-bottom:1px solid var(--xl-line);background:#fff;flex-wrap:wrap;flex:none;align-items:center;gap:6px 10px;padding:6px 10px;display:flex}.xl-bar label{color:var(--xl-muted);white-space:nowrap;align-items:center;gap:4px;display:inline-flex}.xl-bar select,.xl-bar button{font:inherit;color:var(--xl-ink);border:1px solid var(--xl-line);background:#fff;border-radius:4px;padding:2px 6px}.xl-bar button{cursor:pointer}.xl-bar button.primary{border-color:var(--xl-accent);color:var(--xl-accent);font-weight:600}.xl-bar button:focus-visible{outline:2px solid var(--xl-accent);outline-offset:1px}.xl-bar select:focus-visible{outline:2px solid var(--xl-accent);outline-offset:1px}.xl-status{border-top:1px solid var(--xl-line);color:var(--xl-muted);font-variant-numeric:tabular-nums;white-space:nowrap;text-overflow:ellipsis;flex:none;padding:4px 10px;overflow:hidden}.xl-status b{color:var(--xl-ink);font-weight:600}.xl-status.warn{color:var(--xl-warn);background:var(--xl-warn-ground)}#chart{flex:auto;min-height:200px;position:relative}.xl-empty{text-align:center;color:var(--xl-muted);place-items:center;padding:24px;line-height:1.6;display:grid;position:absolute;top:0;bottom:0;left:0;right:0}.xl-empty code{border:1px solid var(--xl-line);background:#fff;border-radius:3px;padding:0 4px}</style>
+    <script type="module" crossorigin src="../../assets/addins-excel-BPvlSkMg.js"></script>
+    <link rel="modulepreload" crossorigin href="../../assets/labelContrast-BR8LLLbA.js">
+    <link rel="modulepreload" crossorigin href="../../assets/facade-DWAPskpp.js">
+  </head>
+  <body class="xl-page">
+    <div class="xl-bar" role="toolbar" aria-label="Chart controls">
+      <label>Rail
+        <select id="rail" aria-label="Rail form">
+          <option value="straight">Straight</option>
+          <option value="arc">Arc</option>
+          <option value="wave">Wave</option>
+          <option value="ring">Ring</option>
+        </select>
+      </label>
+      <label>2nd metric
+        <select id="encoding" aria-label="Secondary encoding">
+          <option value="none">None</option>
+          <option value="knob">Knob size</option>
+          <option value="heat">Heat map</option>
+          <option value="quipu">Quipu knots</option>
+        </select>
+      </label>
+      <label>Theme <select id="theme" aria-label="Theme"></select></label>
+      <label>Sheet
+        <select id="backdrop" aria-label="Backdrop cloth">
+          <option value="plain">Plain</option>
+          <option value="off">Off</option>
+          <option value="tablecloth">Tablecloth</option>
+          <option value="bavarian">Bavarian</option>
+        </select>
+      </label>
+      <button id="use-selection" class="primary" title="Read the currently selected cells as the chart's data">Use selection</button>
+      <button id="use-sheet" title="Read everything on the active sheet">Whole sheet</button>
+      <button id="refresh" title="Re-read the data now">Refresh</button>
+    </div>
+    <div id="chart"></div>
+    <div id="status" class="xl-status" aria-live="polite">Connecting to Excel…</div>
+  </body>
+</html>

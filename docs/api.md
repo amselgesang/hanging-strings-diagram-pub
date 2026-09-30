@@ -12,8 +12,12 @@ Types ship in `dist/types/`; this page mirrors the shipped TypeScript contracts.
 | `hanging-strings-diagram/chartjs` | Chart.js adapter | `registerHangingStringsDiagram` |
 | `hanging-strings-diagram/echarts` | ECharts adapter | `attachHangingStringsDiagram` |
 | `hanging-strings-diagram/react` | React wrapper | `HangingStringsDiagramChart` |
+| `hanging-strings-diagram/excel` | Excel (Office.js) adapter | `attachHangingStringsDiagramToExcel`, `excelRangeToHangingStringsDiagram` |
 
 Build locally with `npm run build:lib`.
+
+**Browser support:** the bundles are ES2020 syntax (Chrome 87+, Edge 88+, Firefox 78+,
+Safari 14+). No polyfills are included; older browsers need your own transpile step.
 
 ## Recommended entry — façade
 
@@ -44,7 +48,7 @@ SVG def ids.
 | `theme` | `string \| HangingStringsDiagramTheme` | `"wool-brass"` | Theme key or object; **unknown keys throw** |
 | `threadTexture` | `string \| null` | `"kernmantle"` | Texture key; `null` = theme’s own texture |
 | `backdrop` | `"off" \| "plain" \| "tablecloth" \| "bavarian" \| "eu" \| "usa" \| "image"` | `"plain"` | Breeze cloth; pass `"off"` to disable; `"image"` drapes `backdropImageUrl` |
-| `backdropImageUrl` | `string` | — | D21.10: the image the `"image"` cloth drapes (any URL — flag, logo, photo) |
+| `backdropImageUrl` | `string` | — | D21.10: the image the `"image"` cloth drapes (flag, logo, photo). `https:`/`http:`/`blob:`/`data:image/` or relative; **other schemes throw** |
 | `backdropRenderer` | `"auto" \| "canvas" \| "svg"` | `"auto"` | How the cloth is painted: `"canvas"` draws it into one `<canvas>` (cheapest — a repaint is one texture upload; SVG re-rasterized every pattern cell per frame and pegged WebKit's GPU process); `"auto"` uses canvas when a 2d context exists, else the SVG cloth |
 | `colorMode` | `"group" \| "heatmap"` | `"group"` | Legacy color switch (see `secondaryEncoding`) |
 | `knobEncodesSecondMetric` | `boolean` | `false` | Legacy knob-size flag |
@@ -70,7 +74,7 @@ SVG def ids.
 | `setTheme(theme)` | Theme key or object (unknown keys throw) |
 | `setThreadTexture(key)` | Texture key, or `null` for theme default |
 | `setBackdrop(mode)` | Backdrop mode |
-| `setBackdropImage(url)` | D21.10: drape any image as the cloth (sets the URL **and** switches to `"image"`) |
+| `setBackdropImage(url)` | D21.10: drape an image as the cloth (sets the URL **and** switches to `"image"`); same URL rule as `backdropImageUrl` |
 | `setWindScale(scale)` | Multiply breeze intensity (`1` normal, `0` calm) |
 | `setSecondaryEncoding(mode)` | `"none" \| "knob" \| "heat" \| "quipu"` |
 | `play()` | D31: pluck the chart left→right (pitch = cord length, pan = x); resolves after the last pluck; no-op while sonification is off; call from a user gesture first (autoplay policy) |
@@ -104,6 +108,34 @@ interface ExpandEvent {
 
 // HoverEvent extends the string hover payload with railMode
 ```
+
+
+### Excel adapter — `hanging-strings-diagram/excel`
+
+No Office.js dependency: the adapter types the `Excel` namespace structurally
+(`ExcelHostLike`, `WorksheetLike`, `RangeLike`), so it also runs against a test double.
+
+```ts
+excelRangeToHangingStringsDiagram(values: ExcelCellValue[][], options?: ExcelRangeMappingOptions): ExcelMappedData
+attachHangingStringsDiagramToExcel(container: HTMLElement, config: HangingStringsDiagramExcelConfig): Promise<HangingStringsDiagramExcel>
+readExcelSource(excel: ExcelHostLike, source?: ExcelDataSource): Promise<{ worksheet; address; values }>
+```
+
+| `HangingStringsDiagramExcelConfig` | Type | Default | Meaning |
+| --- | --- | --- | --- |
+| `excel` | `ExcelHostLike` | *(required)* | The Office.js `Excel` namespace |
+| `source` | `{ worksheet?, address?, table? }` | active sheet's used range | Where the data lives (`table` > `address` > used range) |
+| `mapping` | `ExcelRangeMappingOptions` | auto | `header`, explicit `columns`, declared `groups`, `palette` |
+| `groups` | `HangingStringGroup[]` | — | Sugar for `mapping.groups` |
+| `live` | `boolean` | `true` | Bind `Worksheet.onChanged` |
+| `pollMs` | `number` | `0` | Value-diffing poll for edits the event does not report |
+| `onSync` | `(meta: ExcelSyncMeta) => void` | — | After every read: `reason` (`mount`/`refresh`/`change`/`poll`), `address`, `mapped` |
+| `onError` | `(error) => void` | rethrow | Read failures (chart keeps its last data) |
+| *(plus every façade option except `categories`/`groups`)* | | | Passed through to `createHangingStringsDiagram` |
+
+`HangingStringsDiagramExcel`: `instance` (the façade), `source`, `live`, `refresh()`,
+`setSource(source)`, `dispose()`. `ExcelMappedData` adds `columns` (which zero-based column
+took which role) and `header` (whether row 0 was consumed) to the canonical shape.
 
 ## Data model
 
@@ -149,6 +181,10 @@ Textures are grayscale luminance maps so **data colors always show through**.
 
 - Unknown **theme** string → `TypeError: Unknown Hanging Strings Diagram theme key: "…"`.
 - Unknown **thread texture** key → throws similarly when resolved.
+- **Image URL** with a scheme other than `https:`, `http:`, `blob:`, `data:image/` or none
+  (relative) → `TypeError` from `backdropImageUrl`, `setBackdropImage`, a custom theme's image
+  thread texture, or the low-level `setImage` of `createSheetBackdrop` /
+  `createCanvasSheetBackdrop`. Thrown before the chart changes (see [Security](security.md#image-urls)).
 - Fail loudly at integration time; do not catch-and-ignore unless you have a fallback UI.
 
 ## Advanced surface (prefer façade)

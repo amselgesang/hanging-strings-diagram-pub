@@ -1,5 +1,7 @@
 # Hanging Strings Diagram
 
+**Version 4.3.0** · package `hanging-strings-diagram` · [what changed](index.md#what-changed-in-430)
+
 Hanging Strings Diagram is a data visualization in which **strings hang from a rail** — string
 length encodes the value exactly, a knob weights each string's end, and the whole chart behaves
 like a physical object: strings swing with inertia when moved, hang from real hanger rings, and
@@ -9,7 +11,8 @@ can be dressed in photorealistic materials.
   hierarchy, drag-to-slide, spin-able ring, group-to-front, heat-map or group coloring, knob
   size or quipu knots as a second metric, knot-style ticks, five preset themes, photoreal
   thread textures, optional breeze cloth backdrop, opt-in sonification (plucked-string
-  audio, pitch = value).
+  audio, pitch = value), and an Excel content add-in that hangs a sheet's table and follows
+  edits.
 - **Integrity guarantee:** string length = value, always. Themes and physics are cosmetic by
   contract. Group/heat colors are data encodings and are deliberately *not* themable.
 
@@ -24,7 +27,7 @@ can be dressed in photorealistic materials.
 | [Security](docs/security.md) | Trust model, XSS posture, CSP notes |
 | [API](docs/api.md) | Façade options/methods, data model, package exports |
 | [UI testing](docs/ui-testing.md) | Vitest, demo thumbs, manual checklist |
-| [Integration](docs/integration.md) | Best practices + vanilla / Chart.js / ECharts / React examples |
+| [Integration](docs/integration.md) | Best practices + vanilla / Chart.js / ECharts / React / Excel examples |
 
 Public distribution mirror for developers using Hanging Strings Diagram. Prebuilt package,
 static demo, developer guide, and thread texture sources — no library source tree.
@@ -41,4 +44,4 @@ static demo, developer guide, and thread texture sources — no library source t
 Baked luminance maps already ship inside `package/*.min.js` via `THREAD_TEXTURES`. The
 `textures/` folder is the editable photo sources for customization or re-baking.
 
-Published from the private/source project at version **4.2.0** (2026-08-16T20:45Z).
+Published from the private/source project at version **4.3.0** (2026-09-30T15:32Z).
